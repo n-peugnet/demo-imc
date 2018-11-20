@@ -1,0 +1,11 @@
+* {
+	box-sizing: border-box;
+}
+section {
+    margin: 0 auto;
+    max-width: 900px;
+}
+
+p, a, h2, h3 {
+	font-family: consolas, monospace, sans-serif;
+}
