@@ -7,7 +7,7 @@ phpDocumentor.phar
 
 ############## demo-imc ###############
 public/assets/uploads/*
-!public/assets/uploads/README.*
+!public/assets/uploads/94f62b8eb181e465f8acfd4f2672d7a6c44c87b1.jpg
 
 ############## editors ################
 .vscode/*

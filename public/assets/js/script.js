@@ -13,11 +13,11 @@ window.onload = async () => {
 			let html = "";
 			for (const map of array) {
 				let data = JSON.parse(map.json).map;
-				console.log(data);
+				map.name = data.name
+				map.imageId = map.image.split('/').pop().split('.').shift() + map.id;
+				data.name = map.imageId;
 				imageMap.setFromObject(data);
 				map.html = imageMap.toHtml();
-				map.name = data.name
-				map.imageId = map.image.split('/').pop();
 				html += Mustache.render(template, map)
 			}
 			return html;

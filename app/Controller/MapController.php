@@ -31,6 +31,10 @@ class MapController extends FileController
 			$ext = $this->fileExt($path);
 			$path = $this->fileSave($path, $ext);
 
+			$maps = new MapModel();
+			$data['image'] = $path;
+			$maps->insert($data);
+
 			$response = array(
 				"status" => "success",
 				"error" => false,
