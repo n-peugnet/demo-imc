@@ -18,17 +18,27 @@ class Controller extends \W\Controller\Controller
 	 */
 	protected function extractData($method, $params, $optionnal = false)
 	{
-		$input = "_$method";
+		switch ($method) {
+			case 'POST':
+				$input = $_POST;
+				break;
+			case 'GET':
+				$input = $_GET;
+				break;
+			default:
+				throw new ErrorException("Method: $method cannot be used with this function.", 1);
+				break;
+		}
 		$data = [];
 		foreach ($params as $param) {
-			if (!isset($$input[$param])) {
+			if (!isset($input[$param])) {
 				if (!$optionnal) {
 					throw new RuntimeException("Invalid parameters. Undefined parameter: $param.", 400);
 				} else {
 					$data[$param] = null;
 				}
 			} else {
-				$data[$param] = $$input[$param];
+				$data[$param] = $input[$param];
 			}
 		}
 		return $data;

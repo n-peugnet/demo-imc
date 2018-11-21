@@ -36,7 +36,7 @@ function submitForm(form, e) {
 
 	const data = new FormData(form);
 	data.append('json', iMap.exportMap());
-	data.append('upfile', iMap.imgfile);
+	data.append('upfile', iMap.img.file);
 
 	const request = new Request(form.action, {
 		method: 'POST',

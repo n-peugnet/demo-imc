@@ -23,14 +23,13 @@ class MapController extends FileController
 	{
 		try {
 			$data = $this->extractData('POST', [
-				'html',
-				'svg',
+				'pseudo',
 				'json',
 			]);
 			$path = $this->fileCheck();
 			$size = $this->fileSize();
 			$ext = $this->fileExt($path);
-			$path = $this->fileSave($path);
+			$path = $this->fileSave($path, $ext);
 
 			$response = array(
 				"status" => "success",

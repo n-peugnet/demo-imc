@@ -1,9 +1,10 @@
 <?php $this->layout('layout', ['title' => 'Accueil']) ?>
 
 <?php $this->start('js') ?>
-	<script src=<?= $this->assetUrl("js/image-map-creator.bundle.js") ?>></script>
-	<script src=<?= $this->assetUrl("js/mustache.min.js") ?>></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/p5.min.js"></script>
+	<script src="<?= $this->assetUrl("js/image-map-creator.bundle.js") ?>""></script>
+	<!-- <script src="http://virtualhost/image-map-creator/dist/image-map-creator.bundle.js"></script> -->
+	<script src="<?= $this->assetUrl("js/mustache.min.js") ?>""></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/p5.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/addons/p5.dom.min.js"></script>
 	<script src=<?= $this->assetUrl("js/script.js") ?> defer></script>
 <?php $this->stop('js') ?>
@@ -11,7 +12,12 @@
 <?php $this->start('main_content') ?>
 	<div id="div-1" style="position: relative;"></div>
 
-	<form action="<?= $this->url('api-insert-maps') ?>" method="post" onsubmit="submitForm(this, event)">
+	<form
+		action="<?= $this->url('api-insert-maps') ?>"
+		method="post"
+		onsubmit="submitForm(this, event)"
+		enctype="multipart/form-data"
+	>
 		<label class="text">
 			pseudo
 			<input

@@ -8,3 +8,6 @@ phpDocumentor.phar
 ############## demo-imc ###############
 public/assets/uploads/*
 !public/assets/uploads/README.*
+
+############## editors ################
+.vscode/*

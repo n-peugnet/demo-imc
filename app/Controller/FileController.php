@@ -60,7 +60,7 @@ class FileController extends Controller
 	{
 		// DO NOT TRUST $_FILES['upfile']['mime'] VALUE !!
 		// Check MIME Type.
-		$finfo = new finfo(FILEINFO_MIME_TYPE);
+		$finfo = new \finfo(FILEINFO_MIME_TYPE);
 		if (false === $ext = array_search(
 			$finfo->file($path),
 			array(
@@ -87,10 +87,14 @@ class FileController extends Controller
 		// You should name it uniquely.
 		// DO NOT USE $_FILES['upfile']['name'] WITHOUT ANY VALIDATION !!
 		// On this example, obtain safe unique name from its binary data.
-		$newPath = sprintf('uploads/%s.%s', sha1_file($tmpPath), $ext);
+		$newPath = sprintf(
+			'uploads/%s.%s',
+			sha1_file($tmpPath),
+			$ext
+		);
 		if (!move_uploaded_file(
 			$tmpPath,
-			$this->assetUrl($newPath)
+			"./assets/$newPath"
 		)) {
 			throw new RuntimeException('Failed to move uploaded file.');
 		}
