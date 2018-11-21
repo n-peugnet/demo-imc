@@ -16,7 +16,7 @@ class MapModel extends \W\Model\Model
 		$limit = $items;
 		$sql = "SELECT
 			`id`,
-			`html`,
+			`json`,
 			`image`,
 			`date`,
 			`pseudo`
