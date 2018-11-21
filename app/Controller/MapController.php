@@ -8,15 +8,25 @@ use \Model\MapModel;
 
 class MapController extends FileController
 {
-	public function list()
+	public function list($page = 1)
 	{
+		$items = 10;
 		$maps = new MapModel();
-		$data = $maps->getPage(1, 10);
+		$nbPages = $maps->nbPages($items);
+
+		$data = $maps->getPage($page, $items);
 		$data = array_map(function ($row) {
 			$row['image'] = $this->assetUrl($row['image']);
 			return $row;
 		}, $data);
-		$this->showJson($data);
+		$response = array(
+			"status" => "success",
+			"message" => "Successfully retrieved maps of page $page",
+			'remaining' => $nbPages > $page,
+			'maps' => $data,
+			'page' => $page,
+		);
+		$this->showJson($response);
 	}
 
 	public function insert()
@@ -37,7 +47,6 @@ class MapController extends FileController
 
 			$response = array(
 				"status" => "success",
-				"error" => false,
 				"message" => "File uploaded successfully"
 			);
 			$this->showJson($response);
@@ -45,7 +54,6 @@ class MapController extends FileController
 		} catch (\Exception $e) {
 			$response = array(
 				"status" => "error",
-				"error" => true,
 				"message" => $e->getMessage()
 			);
 			http_response_code($e->getCode());

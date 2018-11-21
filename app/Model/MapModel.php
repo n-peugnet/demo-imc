@@ -9,6 +9,7 @@ class MapModel extends \W\Model\Model
 	 * Gets a page of maps
 	 * @param int $page number of the page
 	 * @param int $items number of items per page
+	 * @return array page of maps
 	 */
 	public function getPage($page, $items)
 	{
@@ -29,5 +30,29 @@ class MapModel extends \W\Model\Model
 		$req->bindParam('o', $offset, PDO::PARAM_INT);
 		$res = $req->execute();
 		return $req->fetchAll();
+	}
+
+	/**
+	 * Count the total number of maps
+	 * @return int number of maps
+	 */
+	public function count()
+	{
+		$sql = "SELECT
+			COUNT(`id`) AS nb
+			FROM `map`";
+		$req = $this->dbh->query($sql);
+		return $req->fetch()['nb'];
+	}
+
+	/**
+	 * Count the total number of pages
+	 * @param int $items number of items per page
+	 * @return int number of pages
+	 */
+	public function nbPages($items)
+	{
+		$count = $this->count();
+		return (int)$count / $items;
 	}
 }
