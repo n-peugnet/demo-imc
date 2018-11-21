@@ -1,4 +1,10 @@
-/vendor/
+
+################# W ###################
+vendor/
 app/config.php
-/phpDocumentor.phar
+phpDocumentor.phar
 *.log
+
+############## demo-imc ###############
+public/assets/uploads/*
+!public/assets/uploads/README.*

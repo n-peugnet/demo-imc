@@ -14,13 +14,20 @@ class MapModel extends \W\Model\Model
 	{
 		$offset = ($page - 1) * $items;
 		$limit = $items;
-		$sql = "SELECT *
-			FROM map
+		$sql = "SELECT
+			`id`,
+			`html`,
+			`image`,
+			`date`,
+			`pseudo`
+			FROM `map`
+			ORDER BY `date` DESC
 			LIMIT :l
 			OFFSET :o";
 		$req = $this->dbh->prepare($sql);
 		$req->bindParam('l', $limit, PDO::PARAM_INT);
 		$req->bindParam('o', $offset, PDO::PARAM_INT);
 		$res = $req->execute();
+		return $req->fetchAll();
 	}
 }

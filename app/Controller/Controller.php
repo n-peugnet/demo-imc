@@ -9,7 +9,7 @@ use RuntimeException;
 class Controller extends \W\Controller\Controller
 {
 	/**
-	 * Extract params from the url
+	 * Extract params from the request
 	 * @param string $method GET|POST
 	 * @param string[] $params list of params to extract
 	 * @param bool $optionnal false: throw error if param is not set

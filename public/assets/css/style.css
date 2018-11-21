@@ -6,6 +6,20 @@ section {
     max-width: 900px;
 }
 
-p, a, h2, h3 {
+p, a, h2, h3, h4, input, .text {
 	font-family: consolas, monospace, sans-serif;
+}
+
+p, a, input, .text {
+    font-size: 0.9rem;
+}
+
+#maps h3 {
+    color: #777777;
+    margin: 0 0 5px;
+    font-size: 1rem;
+}
+
+#maps h2 {
+    margin: 5px 0 0;
 }

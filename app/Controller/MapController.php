@@ -12,6 +12,10 @@ class MapController extends FileController
 	{
 		$maps = new MapModel();
 		$data = $maps->getPage(1, 10);
+		$data = array_map(function ($row) {
+			$row['image'] = $this->assetUrl($row['image']);
+			return $row;
+		}, $data);
 		$this->showJson($data);
 	}
 
