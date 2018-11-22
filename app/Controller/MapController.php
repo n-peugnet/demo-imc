@@ -63,6 +63,7 @@ class MapController extends ImageController
 				'pseudo',
 				'json',
 			]);
+			$this->checkTexts($data, ['pseudo' => 32]);
 			$this->checkJson($data['json']);
 			$path = $this->fileCheck();
 			$size = $this->fileSize();
@@ -96,7 +97,7 @@ class MapController extends ImageController
 	/**
 	 * Check a imc-save JSON
 	 * @param string $string JSON string to check
-	 * @return true
+	 * @return \stdClass
 	 * @throws RuntimeException
 	 */
 	protected function checkJson($string)
@@ -106,6 +107,7 @@ class MapController extends ImageController
 			empty($object->map->areas)) {
 			throw new RuntimeException("[JSON] Invalid data. Undefined parameter: map", 400);
 		}
+		return $object;
 	}
 
 }

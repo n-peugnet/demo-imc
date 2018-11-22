@@ -62,9 +62,24 @@ class Controller extends \W\Controller\Controller
 	}
 
 	/**
+	 * Check each texts from data based on given sizes associative array
+	 * @param string[] $data associative array to check
+	 * @param int[] $sizes associative array of max sizes
+	 * @throws RuntimeException
+	 */
+	protected function checkTexts($data, $sizes)
+	{
+		foreach ($sizes as $key => $size) {
+			if (mb_strlen($data[$key]) > $size) {
+				throw new RuntimeException("Invalid parameters. Exceeded Textsize: $key", 400);
+			}
+		}
+	}
+
+	/**
 	 * Check a JSON string
 	 * @param string $string JSON string to check
-	 * @return true
+	 * @return \stdClass
 	 * @throws RuntimeException
 	 */
 	protected function checkJson($string)
