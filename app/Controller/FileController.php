@@ -59,17 +59,19 @@ class FileController extends Controller
 	{
 		// DO NOT TRUST $_FILES['upfile']['mime'] VALUE !!
 		// Check MIME Type.
+		$mimes = array(
+			'image/jpeg' => 'jpg',
+			'image/png' => 'png',
+			'image/gif' => 'gif',
+			'image/bmp' => 'bmp',
+			'image/x-ms-bmp' => 'bmp',
+			'image/x-windows-bmp' => 'bmp',
+		);
 		$finfo = new \finfo(FILEINFO_MIME_TYPE);
-		if (false === $ext = array_search(
-			$finfo->file($path),
-			array(
-				'jpg' => 'image/jpeg',
-				'png' => 'image/png',
-				'gif' => 'image/gif',
-			),
-			true
-		)) {
-			throw new RuntimeException('Invalid file format.', 400);
+		$mime = $finfo->file($path);
+		$ext = array_key_exists($mime, $mimes) ? $mimes[$mime] : false;
+		if ($ext === false) {
+			throw new RuntimeException("Invalid file format. ($mime)", 400);
 		}
 		return $ext;
 	}

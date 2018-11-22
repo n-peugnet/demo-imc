@@ -60,4 +60,38 @@ class Controller extends \W\Controller\Controller
 		}
 		return $data;
 	}
+
+	/**
+	 * Check a JSON string
+	 * @param string $string JSON string to check
+	 * @return true
+	 * @throws RuntimeException
+	 */
+	protected function checkJson($string)
+	{
+		json_decode($string);
+		switch (json_last_error()) {
+			case JSON_ERROR_NONE:
+				return true;
+				break;
+			case JSON_ERROR_DEPTH:
+				throw new RuntimeException('[JSON] Maximum stack depth exceeded', 400);
+				break;
+			case JSON_ERROR_STATE_MISMATCH:
+				throw new RuntimeException('[JSON] Underflow or the modes mismatch', 400);
+				break;
+			case JSON_ERROR_CTRL_CHAR:
+				throw new RuntimeException('[JSON] Unexpected control character found', 400);
+				break;
+			case JSON_ERROR_SYNTAX:
+				throw new RuntimeException('[JSON] Syntax error, malformed JSON', 400);
+				break;
+			case JSON_ERROR_UTF8:
+				throw new RuntimeException('[JSON] Malformed UTF-8 characters, possibly incorrectly encoded', 400);
+				break;
+			default:
+				throw new RuntimeException('[JSON] Unknown error', 400);
+				break;
+		}
+	}
 }

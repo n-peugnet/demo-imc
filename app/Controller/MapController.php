@@ -40,6 +40,7 @@ class MapController extends ImageController
 				'pseudo',
 				'json',
 			]);
+			$this->checkJson($data['json']);
 			$path = $this->fileCheck();
 			$size = $this->fileSize();
 			$ext = $this->fileExt($path);
