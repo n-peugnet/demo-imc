@@ -15,7 +15,7 @@
 	<form
 		action="<?= $this->url('api_insert_maps') ?>"
 		method="post"
-		onsubmit="submitForm(this, event)"
+		id="publish-form"
 		enctype="multipart/form-data"
 	>
 		<label class="text">
@@ -48,6 +48,7 @@
 		let loaded = {
 			first: 0,
 			last: <?= $maxMapId ?>,
+			remaining: <?= $maxMapId > 0 ?>,
 		}
 	</script>
 <?php $this->stop('main_content') ?>

@@ -63,11 +63,12 @@ class MapController extends ImageController
 			$data['image'] = $path;
 			$data['scale'] = $scale;
 			$data['date'] = gmdate('Y-m-d H:i:s');
-			$maps->insert($data);
+			$insertId = $maps->insert($data)['id'];
 
 			$response = array(
 				"status" => "success",
 				"message" => "File uploaded successfully",
+				"insertId" => $insertId,
 			);
 			$this->showJson($response);
 
