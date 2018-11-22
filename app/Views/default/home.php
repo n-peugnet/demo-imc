@@ -46,8 +46,8 @@
 			template: '<?= $this->assetUrl('templates/view.map.mustache') ?>',
 		}
 		let loaded = {
-			first: 0,
-			last: <?= $maxMapId ?>,
+			first: <?= $maxMapId ?>,
+			next: <?= $maxMapId ?>,
 			remaining: <?= $maxMapId > 0 ?>,
 		}
 	</script>

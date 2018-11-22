@@ -7,6 +7,7 @@ use \Model\MapModel;
 
 class MapController extends ImageController
 {
+	protected $nbRows = 10;
 	protected $maxMaps = 2000;
 
 	public function read($id)
@@ -27,19 +28,29 @@ class MapController extends ImageController
 		$this->showJson($response);
 	}
 
-	public function list($from = 0, $number = 10)
+	public function listFrom($from, $order = 'ASC')
 	{
 		$maps = new MapModel();
 		$min = $maps->min();
-		if ($from < 1) {
-			$from = $maps->max();
-		}
-		$data = $maps->list($from, $number, $this->assetUrl(''));
-		$remaining = $data[count($data) - 1]['id'] > $min;
+		$data = $maps->listFrom($from, $order, $this->nbRows, $this->assetUrl(''));
+		$remaining = ($nb = count($data)) > 0 ? $data[$nb - 1]['id'] > $min : false;
 		$response = array(
 			"status" => "success",
-			"message" => "Successfully retrieved $number maps from $from",
+			"message" => "Successfully retrieved $nb maps from $from",
 			'remaining' => $remaining,
+			'maps' => $data,
+		);
+		$this->showJson($response);
+	}
+
+	public function listFromTo($from, $to)
+	{
+		$maps = new MapModel();
+		$data = $maps->listFromTo($from, $to, $this->nbRows, $this->assetUrl(''));
+		$nb = count($data);
+		$response = array(
+			"status" => "success",
+			"message" => "Successfully retrieved $nb maps from $from to $to",
 			'maps' => $data,
 		);
 		$this->showJson($response);

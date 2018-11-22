@@ -12,21 +12,18 @@ class MapModel extends \W\Model\Model
 		if (false === $map = parent::find($id)) {
 			return false;
 		}
-		$date = new DateTime($map['date'], new DateTimeZone('UTC'));
-		$map['date'] = $date->format('Y-m-d H:i:s e');
-		$map['image'] = $basePath . $map['image'];
-		$map['json'] = json_decode($map['json']);
-		return $map;
+		return $this->adaptValues($map, $basePath);
 	}
 
 	/**
-	 * Gets a list of maps
+	 * Gets a list of maps from an id
 	 * @param int $from id of the first item to retrieve
 	 * @param int $limit number of items
 	 * @return array page of maps
 	 */
-	public function list($from, $limit, $basePath)
+	public function listFrom($from, $order, $limit, $basePath)
 	{
+		$op = $order == 'ASC' ? '>' : '<';
 		$sql = "SELECT
 			`id`,
 			`json`,
@@ -35,8 +32,8 @@ class MapModel extends \W\Model\Model
 			`date`,
 			`pseudo`
 			FROM `map`
-			WHERE `id` <= :f
-			ORDER BY `date` DESC
+			WHERE `id` $op= :f
+			ORDER BY `id` $order
 			LIMIT :l;";
 		$req = $this->dbh->prepare($sql);
 		$req->bindParam('f', $from, PDO::PARAM_INT);
@@ -44,11 +41,42 @@ class MapModel extends \W\Model\Model
 		$res = $req->execute();
 
 		return array_map(function ($row) use ($basePath) {
-			$date = new DateTime($row['date'], new DateTimeZone('UTC'));
-			$row['date'] = $date->format('Y-m-d H:i:s e');
-			$row['image'] = $basePath . $row['image'];
-			$row['json'] = json_decode($row['json']);
-			return $row;
+			return $this->adaptValues($row, $basePath);
+		}, $req->fetchAll());
+	}
+
+	/**
+	 * Gets a list of maps from an id
+	 * @param int $from id of the first item to retrieve
+	 * @param int $limit number of items
+	 * @return array page of maps
+	 */
+	public function listFromTo($from, $to, $limit, $basePath)
+	{
+		$diff = $from - $to;
+		$opFrom = $diff > 0 ? '<' : '>';
+		$opTo = $diff > 0 ? '>' : '<';
+		$order = $diff > 0 ? 'DESC' : 'ASC';
+		$sql = "SELECT
+			`id`,
+			`json`,
+			`image`,
+			`scale`,
+			`date`,
+			`pseudo`
+			FROM `map`
+			WHERE `id` $opFrom= :f
+			AND `id` $opTo :t
+			ORDER BY `id` $order
+			LIMIT :l;";
+		$req = $this->dbh->prepare($sql);
+		$req->bindParam('f', $from, PDO::PARAM_INT);
+		$req->bindParam('t', $to, PDO::PARAM_INT);
+		$req->bindParam('l', $limit, PDO::PARAM_INT);
+		$res = $req->execute();
+
+		return array_map(function ($row) use ($basePath) {
+			return $this->adaptValues($row, $basePath);
 		}, $req->fetchAll());
 	}
 
@@ -86,5 +114,14 @@ class MapModel extends \W\Model\Model
 		$req->bindParam('nb_max', $nbMax, PDO::PARAM_INT);
 		$res = $req->execute();
 		return $req->rowCount();
+	}
+
+	protected function adaptValues($map, $basePath)
+	{
+		$date = new DateTime($map['date'], new DateTimeZone('UTC'));
+		$map['date'] = $date->format('Y-m-d H:i:s e');
+		$map['image'] = $basePath . $map['image'];
+		$map['json'] = json_decode($map['json']);
+		return $map;
 	}
 }

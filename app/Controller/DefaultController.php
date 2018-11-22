@@ -13,8 +13,8 @@ class DefaultController extends Controller
 	public function home()
 	{
 		$maps = new MapModel();
-		$lastLoaded = $maps->max() + 1;
-		$this->show('default/home', ['maxMapId' => $lastLoaded]);
+		$maxMapId = $maps->max();
+		$this->show('default/home', ['maxMapId' => $maxMapId]);
 	}
 
 }

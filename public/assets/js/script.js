@@ -15,6 +15,7 @@ window.onload = async () => {
 		e.preventDefault();
 		let image;
 		let json;
+		if (!confirm('Do you really want to publish this map ?')) return false;
 		try {
 			image = getImage(iMap);
 			json = getJson(iMap);
@@ -34,17 +35,22 @@ window.onload = async () => {
 
 		fetch(request)
 			.then(handleErrors)
-			.then(response => {
-				let id = response.insertId + 1;
-				loaded.first = id;
-				return loadMaps({
-					last: id,
+			.then(async response => {
+				let id = parseInt(response.insertId);
+				const html = await loadMaps({
+					next: id,
 					first: loaded.first,
-				}, id - loaded.first)
+				}, loaded.first);
+				loaded.first = id;
+				return { html, id };
 			})
-			.then(html => {
-				list.insertAdjacentHTML('afterbegin', html);
-				location.hash = "#maps";
+			.then(res => {
+				console.log(res);
+				list.insertAdjacentHTML('afterbegin', res.html);
+				document.getElementById(`map-${res.id}`).scrollIntoView({
+					behavior: "smooth",
+					block: "start"
+				});
 			})
 			.catch(console.warn);
 	})
@@ -66,9 +72,9 @@ window.onload = async () => {
 		}
 	});
 
-	async function loadMaps(loaded, number) {
-		let url = `${urls.api}/${loaded.last - 1}`;
-		url += number ? `/${number}` : '';
+	async function loadMaps(loaded, to) {
+		let opt = to ? `-${to}` : '.DESC';
+		let url = `${urls.api}/${loaded.next}${opt}`;
 		return fetch(url)
 			.then(handleErrors)
 			.then(response => {
@@ -87,13 +93,9 @@ window.onload = async () => {
 					map.html = imageMap.toHtml(parseFloat(map.scale));
 					html += Mustache.render(template, map)
 				}
-				let first = parseInt(maps[0].id);
-				let last = parseInt(maps[maps.length - 1].id);
-				if (first > loaded.first) {
-					loaded.first = first;
-				}
-				if (last < loaded.last) {
-					loaded.last = last;
+				let next = parseInt(maps[maps.length - 1].id) - 1;
+				if (next < loaded.next) {
+					loaded.next = next;
 				}
 				loaded.remaining = response.remaining;
 				return html;
