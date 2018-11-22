@@ -3,11 +3,28 @@
 namespace Controller;
 
 use RuntimeException;
+use Locale;
 /**
  * intermediate parent class just in case...
  */
 class Controller extends \W\Controller\Controller
 {
+	protected $locale;
+
+	public function __construct()
+	{
+		$this->setLocale();
+	}
+
+	/**
+	 * Set the current user's locale in the iso format. (ex : 'fr_FR')
+	 * @return string locale
+	 */
+	public function setLocale()
+	{
+		$this->locale = Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+	}
+
 	/**
 	 * Extract params from the request
 	 * @param string $method GET|POST

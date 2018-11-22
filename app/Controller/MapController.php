@@ -5,17 +5,22 @@ namespace Controller;
 use RuntimeException;
 use \Controller\FileController;
 use \Model\MapModel;
+use DateTimeZone;
 
 class MapController extends FileController
 {
+	protected $items = 10;
+	protected $maxMaps = 2000;
+
 	public function list($page = 1)
 	{
-		$items = 10;
 		$maps = new MapModel();
-		$nbPages = $maps->nbPages($items);
+		$nbPages = $maps->nbPages($this->items);
 
-		$data = $maps->getPage($page, $items);
+		$data = $maps->getPage($page, $this->items);
 		$data = array_map(function ($row) {
+			$date = new \DateTime($row['date'], new DateTimeZone('UTC'));
+			$row['date'] = $date->format('Y-m-d H:i:s e');
 			$row['image'] = $this->assetUrl($row['image']);
 			return $row;
 		}, $data);
@@ -43,6 +48,7 @@ class MapController extends FileController
 
 			$maps = new MapModel();
 			$data['image'] = $path;
+			$data['date'] = gmdate('Y-m-d H:i:s');
 			$maps->insert($data);
 
 			$response = array(

@@ -24,7 +24,7 @@ class MapModel extends \W\Model\Model
 			FROM `map`
 			ORDER BY `date` DESC
 			LIMIT :l
-			OFFSET :o";
+			OFFSET :o;";
 		$req = $this->dbh->prepare($sql);
 		$req->bindParam('l', $limit, PDO::PARAM_INT);
 		$req->bindParam('o', $offset, PDO::PARAM_INT);
@@ -40,7 +40,7 @@ class MapModel extends \W\Model\Model
 	{
 		$sql = "SELECT
 			COUNT(`id`) AS nb
-			FROM `map`";
+			FROM `map`;";
 		$req = $this->dbh->query($sql);
 		return $req->fetch()['nb'];
 	}
@@ -54,5 +54,18 @@ class MapModel extends \W\Model\Model
 	{
 		$count = $this->count();
 		return (int)$count / $items;
+	}
+
+	// not used yet
+	public function deleteOverfull($nbMax)
+	{
+		$sql = "DELETE `map`
+			FROM
+				`map`
+			WHERE id <= (SELECT id FROM map ORDER BY id DESC LIMIT 1 OFFSET :nb_max);";
+		$req = $this->dbh->prepare($sql);
+		$req->bindParam('nb_max', $nbMax, PDO::PARAM_INT);
+		$res = $req->execute();
+		return $req->rowCount();
 	}
 }

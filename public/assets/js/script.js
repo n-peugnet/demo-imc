@@ -28,13 +28,20 @@ window.onload = async () => {
 	});
 }
 
+async function handleErrors(response) {
+	if (!response.ok) {
+		const data = await response.json();
+		throw Error(`${response.statusText}. ${data.message}`);
+	}
+	return response.json();
+}
+
 /**
  * 
  * @param {HTMLFormElement} form 
  * @param {Event} e 
  */
 function submitForm(form, e) {
-	console.log({ form, e });
 	e.preventDefault();
 
 	const data = new FormData(form);
@@ -47,14 +54,15 @@ function submitForm(form, e) {
 	});
 
 	fetch(request)
-		.then(response => response.json())
+		.then(handleErrors)
 		.then(console.log)
+		.catch(console.warn);
 }
 
 async function loadMapPage(template, imageMap, list, page = 1) {
 	const url = `${urls.api}/${page}`;
 	return await fetch(url)
-		.then(response => response.json())
+		.then(handleErrors)
 		.then(response => {
 			if (response.status != 'success') throw new Error(response.message);
 			return response;
