@@ -4,31 +4,43 @@ namespace Controller;
 
 use RuntimeException;
 use \Model\MapModel;
-use DateTimeZone;
 
 class MapController extends ImageController
 {
-	protected $items = 10;
 	protected $maxMaps = 2000;
 
-	public function list($page = 1)
+	public function read($id)
 	{
 		$maps = new MapModel();
-		$nbPages = $maps->nbPages($this->items);
+		if (false !== $map = $maps->find($id, $this->assetUrl(''))) {
+			$response = array(
+				"status" => "success",
+				"message" => "Successfully retrieved map $id",
+				"map" => $map,
+			);
+		} else {
+			$response = array(
+				"status" => "error",
+				"message" => "Map $id does not exist",
+			);
+		}
+		$this->showJson($response);
+	}
 
-		$data = $maps->getPage($page, $this->items);
-		$data = array_map(function ($row) {
-			$date = new \DateTime($row['date'], new DateTimeZone('UTC'));
-			$row['date'] = $date->format('Y-m-d H:i:s e');
-			$row['image'] = $this->assetUrl($row['image']);
-			return $row;
-		}, $data);
+	public function list($from = 0, $number = 10)
+	{
+		$maps = new MapModel();
+		$min = $maps->min();
+		if ($from < 1) {
+			$from = $maps->max();
+		}
+		$data = $maps->list($from, $number, $this->assetUrl(''));
+		$remaining = $data[count($data) - 1]['id'] > $min;
 		$response = array(
 			"status" => "success",
-			"message" => "Successfully retrieved maps of page $page",
-			'remaining' => $nbPages > $page,
+			"message" => "Successfully retrieved $number maps from $from",
+			'remaining' => $remaining,
 			'maps' => $data,
-			'page' => $page,
 		);
 		$this->showJson($response);
 	}
@@ -55,14 +67,14 @@ class MapController extends ImageController
 
 			$response = array(
 				"status" => "success",
-				"message" => "File uploaded successfully"
+				"message" => "File uploaded successfully",
 			);
 			$this->showJson($response);
 
 		} catch (\Exception $e) {
 			$response = array(
 				"status" => "error",
-				"message" => $e->getMessage()
+				"message" => $e->getMessage(),
 			);
 			http_response_code($e->getCode());
 			$this->showJson($response);

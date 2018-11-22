@@ -2,19 +2,31 @@
 namespace Model;
 
 use PDO;
+use DateTimeZone;
+use DateTime;
 
 class MapModel extends \W\Model\Model
 {
+	public function find($id, $basePath = '')
+	{
+		if (false === $map = parent::find($id)) {
+			return false;
+		}
+		$date = new DateTime($map['date'], new DateTimeZone('UTC'));
+		$map['date'] = $date->format('Y-m-d H:i:s e');
+		$map['image'] = $basePath . $map['image'];
+		$map['json'] = json_decode($map['json']);
+		return $map;
+	}
+
 	/**
-	 * Gets a page of maps
-	 * @param int $page number of the page
-	 * @param int $items number of items per page
+	 * Gets a list of maps
+	 * @param int $from id of the first item to retrieve
+	 * @param int $limit number of items
 	 * @return array page of maps
 	 */
-	public function getPage($page, $items)
+	public function list($from, $limit, $basePath)
 	{
-		$offset = ($page - 1) * $items;
-		$limit = $items;
 		$sql = "SELECT
 			`id`,
 			`json`,
@@ -23,14 +35,21 @@ class MapModel extends \W\Model\Model
 			`date`,
 			`pseudo`
 			FROM `map`
+			WHERE `id` <= :f
 			ORDER BY `date` DESC
-			LIMIT :l
-			OFFSET :o;";
+			LIMIT :l;";
 		$req = $this->dbh->prepare($sql);
+		$req->bindParam('f', $from, PDO::PARAM_INT);
 		$req->bindParam('l', $limit, PDO::PARAM_INT);
-		$req->bindParam('o', $offset, PDO::PARAM_INT);
 		$res = $req->execute();
-		return $req->fetchAll();
+
+		return array_map(function ($row) use ($basePath) {
+			$date = new DateTime($row['date'], new DateTimeZone('UTC'));
+			$row['date'] = $date->format('Y-m-d H:i:s e');
+			$row['image'] = $basePath . $row['image'];
+			$row['json'] = json_decode($row['json']);
+			return $row;
+		}, $req->fetchAll());
 	}
 
 	/**
@@ -46,15 +65,14 @@ class MapModel extends \W\Model\Model
 		return $req->fetch()['nb'];
 	}
 
-	/**
-	 * Count the total number of pages
-	 * @param int $items number of items per page
-	 * @return int number of pages
-	 */
-	public function nbPages($items)
+	public function max()
 	{
-		$count = $this->count();
-		return (int)$count / $items;
+		return $this->dbh->query('SELECT MAX(`id`) FROM `map`')->fetchColumn();
+	}
+
+	public function min()
+	{
+		return $this->dbh->query('SELECT MIN(`id`) FROM `map`')->fetchColumn();
 	}
 
 	// not used yet

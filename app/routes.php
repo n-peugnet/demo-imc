@@ -2,7 +2,9 @@
 
 $w_routes = array(
 	['GET', '/', 'Default#home', 'home'],
-	['GET', '/api/maps', 'Map#list', 'api-list-maps'],
-	['GET', '/api/maps/[i:page]', 'Map#list', 'api-list-maps-page'],
-	['POST', '/api/maps', 'Map#insert', 'api-insert-maps'],
+	['GET', '/api/map/[i:id]', 'Map#read', 'api_read_map'],
+	['POST', '/api/map', 'Map#insert', 'api_insert_maps'],
+	['GET', '/api/maps', 'Map#list', 'api_list_maps'],
+	['GET', '/api/maps/[i:first]', 'Map#list', 'api_list_map_from'],
+	['GET', '/api/maps/[i:first]/[i:number]', 'Map#list', 'api_list_map_from_nb'],
 );

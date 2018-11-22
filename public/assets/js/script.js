@@ -8,11 +8,9 @@ window.onload = async () => {
 	const imageMap = new imageMapCreator().map;
 	const listElm = document.querySelector('#maps');
 	const html = document.querySelector('html');
-	let page = 1;
 
 	// Initially load some items.
-	let remaining = await loadMapPage(template, imageMap, listElm, page);
-	if (remaining) page++;
+	let remaining = await loadMapPage(template, imageMap, listElm, loaded);
 
 	// Detect when scrolled to bottom.
 	document.addEventListener('scroll', async () => {
@@ -21,8 +19,7 @@ window.onload = async () => {
 			console.log('arrivé en bas');
 			if (remaining) {
 				console.log('chargement de nouveaux éléments');
-				remaining = await loadMapPage(template, imageMap, listElm, page);
-				if (remaining) page++;
+				remaining = await loadMapPage(template, imageMap, listElm, loaded);
 			}
 		}
 	});
@@ -43,10 +40,19 @@ async function handleErrors(response) {
  */
 function submitForm(form, e) {
 	e.preventDefault();
+	let image;
+	let json;
+	try {
+		image = getImage(iMap);
+		json = getJson(iMap);
+	} catch (error) {
+		alert(error.message);
+		return false;
+	}
 
 	const data = new FormData(form);
-	data.append('json', iMap.exportMap());
-	data.append('upfile', iMap.img.file);
+	data.append('upfile', image);
+	data.append('json', json);
 
 	const request = new Request(form.action, {
 		method: 'POST',
@@ -59,8 +65,8 @@ function submitForm(form, e) {
 		.catch(console.warn);
 }
 
-async function loadMapPage(template, imageMap, list, page = 1) {
-	const url = `${urls.api}/${page}`;
+async function loadMapPage(template, imageMap, list, loaded) {
+	const url = `${urls.api}/${loaded.last - 1}`;
 	return await fetch(url)
 		.then(handleErrors)
 		.then(response => {
@@ -69,8 +75,9 @@ async function loadMapPage(template, imageMap, list, page = 1) {
 		})
 		.then(response => {
 			let html = "";
-			for (const map of response.maps) {
-				let data = JSON.parse(map.json).map;
+			let maps = response.maps;
+			for (const map of maps) {
+				let data = map.json.map;
 				map.name = data.name
 				map.imageId = map.image.split('/').pop().split('.').shift() + map.id;
 				data.name = map.imageId;
@@ -79,7 +86,30 @@ async function loadMapPage(template, imageMap, list, page = 1) {
 				html += Mustache.render(template, map)
 			}
 			list.insertAdjacentHTML('beforeend', html);
+			let first = parseInt(maps[0].id);
+			let last = parseInt(maps[maps.length - 1].id);
+			if (first > loaded.first) {
+				loaded.first = first;
+			}
+			if (last < loaded.last) {
+				loaded.last = last;
+			}
 			return response.remaining;
 		})
 		.catch(console.warn);
+}
+
+function getJson(iMap) {
+	if (iMap.map.isEmpty()) {
+		throw new Error('Your map does not contain any area !');
+	}
+	return iMap.exportMap();
+}
+
+function getImage(iMap) {
+	const image = iMap.img.file;
+	if (!image) {
+		throw new Error('Your map has no image !');
+	}
+	return image;
 }

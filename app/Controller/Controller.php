@@ -94,4 +94,20 @@ class Controller extends \W\Controller\Controller
 				break;
 		}
 	}
+
+	/**
+	 * Retourne une réponse JSON au client
+	 * @param mixed $data Les données à retourner
+	 * @return les données au format json
+	 */
+	public function showJson($data, $options = 0)
+	{
+		header('Content-type: application/json');
+		$json = json_encode($data, $options);
+		if ($json) {
+			die($json);
+		} else {
+			die('Error in json encoding');
+		}
+	}
 }

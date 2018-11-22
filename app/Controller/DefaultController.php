@@ -2,6 +2,8 @@
 
 namespace Controller;
 
+use \Model\MapModel;
+
 class DefaultController extends Controller
 {
 
@@ -10,7 +12,9 @@ class DefaultController extends Controller
 	 */
 	public function home()
 	{
-		$this->show('default/home');
+		$maps = new MapModel();
+		$lastLoaded = $maps->max() + 1;
+		$this->show('default/home', ['maxMapId' => $lastLoaded]);
 	}
 
 }

@@ -13,7 +13,7 @@
 	<div id="div-1" style="position: relative;"></div>
 
 	<form
-		action="<?= $this->url('api-insert-maps') ?>"
+		action="<?= $this->url('api_insert_maps') ?>"
 		method="post"
 		onsubmit="submitForm(this, event)"
 		enctype="multipart/form-data"
@@ -40,9 +40,14 @@
 		let iMap = new imageMapCreator(700, 555);
 		let sketch = new p5(iMap.sketch.bind(iMap), "div-1");
 
+		// Globals for loading script
 		let urls = {
-			api: '<?= $this->url('api-list-maps') ?>',
+			api: '<?= $this->url('api_list_maps') ?>',
 			template: '<?= $this->assetUrl('templates/view.map.mustache') ?>',
+		}
+		let loaded = {
+			first: 0,
+			last: <?= $maxMapId ?>,
 		}
 	</script>
 <?php $this->stop('main_content') ?>
