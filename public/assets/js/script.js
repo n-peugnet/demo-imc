@@ -26,8 +26,10 @@ window.onload = async () => {
 		let infoLoading = this.querySelector('.info.loading');
 		let infoSuccess = this.querySelector('.info.success');
 		let infoError = this.querySelector('.info.error');
+		let submitButton = this.querySelector('#publish-form-submit');
 
 		show(infoLoading);
+		disable(submitButton);
 
 		const data = new FormData(this);
 		data.append('upfile', image);
@@ -64,6 +66,7 @@ window.onload = async () => {
 				setTimeout(() => { hide(infoError) }, 1000);
 			});
 		hide(infoLoading);
+		enable(submitButton);
 	});
 
 	// Initially load some items.
@@ -142,5 +145,13 @@ function show(elem) {
 	elem.classList.replace('hidden', 'visible');
 }
 function hide(elem) {
-	elem.classList.replace('visible', 'hidden')
+	elem.classList.replace('visible', 'hidden');
+}
+
+function disable(elem) {
+	elem.disabled = true;
+}
+
+function enable(elem) {
+	elem.disabled = false;
 }

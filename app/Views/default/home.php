@@ -30,7 +30,7 @@
 				required
 			/>
 		</label>
-		<input type="submit" value="publish"/>
+		<input type="submit" value="publish" id="publish-form-submit"/>
 		<img class="info hidden loading" src="<?= $this->assetUrl('img/loading.gif') ?>">
 		<img class="info hidden success" src="<?= $this->assetUrl('img/success.svg') ?>">
 		<img class="info hidden error" src="<?= $this->assetUrl('img/error.svg') ?>">
