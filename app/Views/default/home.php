@@ -1,4 +1,4 @@
-<?php $this->layout('layout', ['title' => 'Accueil']) ?>
+<?php $this->layout('layout', ['title' => 'Image-map Creator']) ?>
 
 <?php $this->start('js') ?>
 	<script src="<?= $this->assetUrl("js/image-map-creator.bundle.js") ?>""></script>
@@ -31,6 +31,9 @@
 			/>
 		</label>
 		<input type="submit" value="publish"/>
+		<img class="info hidden loading" src="<?= $this->assetUrl('img/loading.gif') ?>">
+		<img class="info hidden success" src="<?= $this->assetUrl('img/success.svg') ?>">
+		<img class="info hidden error" src="<?= $this->assetUrl('img/error.svg') ?>">
 	</form>
 
 	<h2>Recently published maps:</h2>

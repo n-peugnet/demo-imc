@@ -28,3 +28,30 @@ p, a, input, .text {
 h2 {
     font-size: 1.3rem;
 }
+
+form {
+    position: relative;
+    display: inline-block;
+}
+
+img.info {
+    position: absolute;
+    height: 18px;
+    top: 3px;
+    right: -25px;
+}
+
+img.info.hidden {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 2s, opacity 2s linear;
+}
+
+img.info.visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+img.info.loading.hidden {
+    transition: none;
+}

@@ -11,7 +11,7 @@ window.onload = async () => {
 	// loaded var comes from home view
 
 	// form onsubmit event
-	document.querySelector('#publish-form').addEventListener('submit', function (e) {
+	document.querySelector('#publish-form').addEventListener('submit', async function (e) {
 		e.preventDefault();
 		let image;
 		let json;
@@ -23,6 +23,11 @@ window.onload = async () => {
 			alert(error.message);
 			return false;
 		}
+		let infoLoading = this.querySelector('.info.loading');
+		let infoSuccess = this.querySelector('.info.success');
+		let infoError = this.querySelector('.info.error');
+
+		show(infoLoading);
 
 		const data = new FormData(this);
 		data.append('upfile', image);
@@ -33,7 +38,7 @@ window.onload = async () => {
 			body: data
 		});
 
-		fetch(request)
+		await fetch(request)
 			.then(handleErrors)
 			.then(async response => {
 				let id = parseInt(response.insertId);
@@ -45,15 +50,21 @@ window.onload = async () => {
 				return { html, id };
 			})
 			.then(res => {
-				console.log(res);
+				show(infoSuccess);
+				setTimeout(() => { hide(infoSuccess); }, 1000);
 				list.insertAdjacentHTML('afterbegin', res.html);
 				document.getElementById(`map-${res.id}`).scrollIntoView({
 					behavior: "smooth",
-					block: "start"
+					block: "start",
 				});
 			})
-			.catch(console.warn);
-	})
+			.catch(error => {
+				console.warn(error);
+				show(infoError);
+				setTimeout(() => { hide(infoError) }, 1000);
+			});
+		hide(infoLoading);
+	});
 
 	// Initially load some items.
 	await loadMaps(loaded)
@@ -125,4 +136,11 @@ function getImage(iMap) {
 		throw new Error('Your map has no image !');
 	}
 	return image;
+}
+
+function show(elem) {
+	elem.classList.replace('hidden', 'visible');
+}
+function hide(elem) {
+	elem.classList.replace('visible', 'hidden')
 }
