@@ -1,0 +1,3 @@
+[submodule "public/assets/js/image-map-creator"]
+	path = public/assets/js/image-map-creator
+	url = https://github.com/n-peugnet/image-map-creator

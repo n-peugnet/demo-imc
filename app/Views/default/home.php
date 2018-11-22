@@ -1,8 +1,7 @@
 <?php $this->layout('layout', ['title' => 'Image-map Creator']) ?>
 
 <?php $this->start('js') ?>
-	<script src="<?= $this->assetUrl("js/image-map-creator.bundle.js") ?>""></script>
-	<!-- <script src="http://virtualhost/image-map-creator/dist/image-map-creator.bundle.js"></script> -->
+	<script src="<?= $this->assetUrl("js/image-map-creator/dist/image-map-creator.bundle.js") ?>""></script>
 	<script src="<?= $this->assetUrl("js/mustache.min.js") ?>""></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/p5.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/addons/p5.dom.min.js"></script>
