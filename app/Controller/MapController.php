@@ -93,4 +93,19 @@ class MapController extends ImageController
 		}
 	}
 
+	/**
+	 * Check a imc-save JSON
+	 * @param string $string JSON string to check
+	 * @return true
+	 * @throws RuntimeException
+	 */
+	protected function checkJson($string)
+	{
+		$object = parent::checkJson($string);
+		if (empty($object->map) ||
+			empty($object->map->areas)) {
+			throw new RuntimeException("[JSON] Invalid data. Undefined parameter: map", 400);
+		}
+	}
+
 }

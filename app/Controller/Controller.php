@@ -69,10 +69,10 @@ class Controller extends \W\Controller\Controller
 	 */
 	protected function checkJson($string)
 	{
-		json_decode($string);
+		$object = json_decode($string);
 		switch (json_last_error()) {
 			case JSON_ERROR_NONE:
-				return true;
+				return $object;
 				break;
 			case JSON_ERROR_DEPTH:
 				throw new RuntimeException('[JSON] Maximum stack depth exceeded', 400);
