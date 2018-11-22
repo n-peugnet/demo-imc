@@ -75,7 +75,7 @@ async function loadMapPage(template, imageMap, list, page = 1) {
 				map.imageId = map.image.split('/').pop().split('.').shift() + map.id;
 				data.name = map.imageId;
 				imageMap.setFromObject(data);
-				map.html = imageMap.toHtml();
+				map.html = imageMap.toHtml(parseFloat(map.scale));
 				html += Mustache.render(template, map)
 			}
 			list.insertAdjacentHTML('beforeend', html);

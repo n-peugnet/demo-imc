@@ -2,8 +2,6 @@
 
 namespace Controller;
 
-use \Controller\Controller;
-
 class DefaultController extends Controller
 {
 

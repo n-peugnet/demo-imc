@@ -3,11 +3,10 @@
 namespace Controller;
 
 use RuntimeException;
-use \Controller\FileController;
 use \Model\MapModel;
 use DateTimeZone;
 
-class MapController extends FileController
+class MapController extends ImageController
 {
 	protected $items = 10;
 	protected $maxMaps = 2000;
@@ -44,10 +43,12 @@ class MapController extends FileController
 			$path = $this->fileCheck();
 			$size = $this->fileSize();
 			$ext = $this->fileExt($path);
+			$scale = $this->autoResize($path, $ext);
 			$path = $this->fileSave($path, $ext);
 
 			$maps = new MapModel();
 			$data['image'] = $path;
+			$data['scale'] = $scale;
 			$data['date'] = gmdate('Y-m-d H:i:s');
 			$maps->insert($data);
 
@@ -65,12 +66,6 @@ class MapController extends FileController
 			http_response_code($e->getCode());
 			$this->showJson($response);
 		}
-	}
-
-	protected function resize($map)
-	{
-		# code...
-		parent::resize($image);
 	}
 
 }

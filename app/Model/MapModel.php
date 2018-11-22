@@ -19,6 +19,7 @@ class MapModel extends \W\Model\Model
 			`id`,
 			`json`,
 			`image`,
+			`scale`,
 			`date`,
 			`pseudo`
 			FROM `map`

@@ -3,7 +3,6 @@
 namespace Controller;
 
 use RuntimeException;
-use \Controller\Controller;
 use \Model\MapModel;
 
 class FileController extends Controller
@@ -99,11 +98,6 @@ class FileController extends Controller
 			throw new RuntimeException('Failed to move uploaded file.');
 		}
 		return $newPath;
-	}
-
-	protected function resize($image)
-	{
-		# code...
 	}
 
 }
