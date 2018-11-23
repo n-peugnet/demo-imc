@@ -7,9 +7,13 @@ use \Model\MapModel;
 
 class MapController extends ImageController
 {
-	protected $nbRows = 10;
+	protected $listMaxRows = 10;
 	protected $maxMaps = 2000;
 
+	/**
+	 * API: read one map
+	 * @param int $id map's id
+	 */
 	public function read($id)
 	{
 		$maps = new MapModel();
@@ -28,11 +32,16 @@ class MapController extends ImageController
 		$this->showJson($response);
 	}
 
+	/**
+	 * API: read multiple maps from one id asc or desc, limited by $listMaxRows
+	 * @param int $from first map's id (included)
+	 * @param string $order 'ASC' or 'DESC'
+	 */
 	public function listFrom($from, $order = 'ASC')
 	{
 		$maps = new MapModel();
 		$min = $maps->min();
-		$data = $maps->listFrom($from, $order, $this->nbRows, $this->assetUrl(''));
+		$data = $maps->listFrom($from, $order, $this->listMaxRows, $this->assetUrl(''));
 		$remaining = ($nb = count($data)) > 0 ? $data[$nb - 1]['id'] > $min : false;
 		$response = array(
 			"status" => "success",
@@ -43,10 +52,15 @@ class MapController extends ImageController
 		$this->showJson($response);
 	}
 
+	/**
+	 * API: read multiple maps from one id to another, limited by $listMaxRows
+	 * @param int $from first map's id (included)
+	 * @param int $to last map's id (excluded)
+	 */
 	public function listFromTo($from, $to)
 	{
 		$maps = new MapModel();
-		$data = $maps->listFromTo($from, $to, $this->nbRows, $this->assetUrl(''));
+		$data = $maps->listFromTo($from, $to, $this->listMaxRows, $this->assetUrl(''));
 		$nb = count($data);
 		$response = array(
 			"status" => "success",
@@ -56,6 +70,9 @@ class MapController extends ImageController
 		$this->showJson($response);
 	}
 
+	/**
+	 * API: create one map from a form
+	 */
 	public function insert()
 	{
 		try {

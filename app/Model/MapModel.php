@@ -1,11 +1,11 @@
-<?php /* app/Model/CommentModel.php */
+<?php
 namespace Model;
 
 use PDO;
 use DateTimeZone;
 use DateTime;
 
-class MapModel extends \W\Model\Model
+class MapModel extends Model
 {
 	public function find($id, $basePath = '')
 	{
@@ -16,9 +16,11 @@ class MapModel extends \W\Model\Model
 	}
 
 	/**
-	 * Gets a list of maps from an id
-	 * @param int $from id of the first item to retrieve
+	 * Gets a list of maps from an id in an order
+	 * @param int $from id of the first item to retrieve (included)
+	 * @param string $order 'ASC' or 'DESC'
 	 * @param int $limit number of items
+	 * @param string $basePath needed for image url adaptation
 	 * @return array page of maps
 	 */
 	public function listFrom($from, $order, $limit, $basePath)
@@ -46,9 +48,11 @@ class MapModel extends \W\Model\Model
 	}
 
 	/**
-	 * Gets a list of maps from an id
-	 * @param int $from id of the first item to retrieve
+	 * Gets a list of maps from an id to another
+	 * @param int $from id of the first item to retrieve (included)
+	 * @param int $to id of the last item to retrieve (excluded)
 	 * @param int $limit number of items
+	 * @param string $basePath needed for image url adaptation
 	 * @return array page of maps
 	 */
 	public function listFromTo($from, $to, $limit, $basePath)
@@ -93,17 +97,11 @@ class MapModel extends \W\Model\Model
 		return $req->fetch()['nb'];
 	}
 
-	public function max()
-	{
-		return $this->dbh->query('SELECT MAX(`id`) FROM `map`')->fetchColumn();
-	}
-
-	public function min()
-	{
-		return $this->dbh->query('SELECT MIN(`id`) FROM `map`')->fetchColumn();
-	}
-
-	// not used yet
+	/**
+	 * (not used yet) Delete the overfull of maps from the bdd
+	 * @param int $nbMax the max number of maps allowed
+	 * @return int number of lines deleted
+	 */
 	public function deleteOverfull($nbMax)
 	{
 		$sql = "DELETE `map`
@@ -116,6 +114,12 @@ class MapModel extends \W\Model\Model
 		return $req->rowCount();
 	}
 
+	/**
+	 * Adapt Sql results value du correct ones
+	 * @param mixed[] $map Sql results row
+	 * @param string $basePath needed for image url adaptation
+	 * @return mixed[]
+	 */
 	protected function adaptValues($map, $basePath)
 	{
 		$date = new DateTime($map['date'], new DateTimeZone('UTC'));
