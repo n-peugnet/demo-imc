@@ -23,6 +23,9 @@ p, a, input, .text {
 #maps h3 {
     margin: 5px 0 0;
     font-size: 1.5rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 h2 {
@@ -54,4 +57,10 @@ img.info.visible {
 
 img.info.loading.hidden {
     transition: none;
+}
+
+@media screen and (max-width: 900px) {
+    #div-1, #publish-form {
+      display:none;
+    }
 }

@@ -22,7 +22,6 @@
 			<input
 				type="text"
 				name="pseudo"
-				value="anonymous"
 				placeholder="anonymous"
 				minlength="2"
 				maxlength="32"
