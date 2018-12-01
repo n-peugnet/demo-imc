@@ -11,6 +11,7 @@
 <?php $this->start('main_content') ?>
 	<div id="div-1" style="position: relative;"></div>
 
+	<iframe src="https://ghbtns.com/github-btn.html?user=n-peugnet&repo=image-map-creator&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
 	<form
 		action="<?= $this->url('api_insert_maps') ?>"
 		method="post"

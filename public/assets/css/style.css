@@ -35,6 +35,7 @@ h2 {
 form {
     position: relative;
     display: inline-block;
+    margin-left: 60px;
 }
 
 img.info {
@@ -63,4 +64,10 @@ img.info.loading.hidden {
     #div-1, #publish-form {
       display:none;
     }
+}
+
+iframe {
+    display: inline-block;
+    vertical-align: middle;
+    /* float: right; */
 }
