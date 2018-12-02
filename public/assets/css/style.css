@@ -35,14 +35,15 @@ h2 {
 form {
     position: relative;
     display: inline-block;
-    margin-left: 60px;
+    padding-right: 25px;
+    margin-right: 3px;
 }
 
 img.info {
     position: absolute;
     height: 18px;
     top: 3px;
-    right: -25px;
+    right: 0;
 }
 
 img.info.hidden {
@@ -60,14 +61,13 @@ img.info.loading.hidden {
     transition: none;
 }
 
-@media screen and (max-width: 900px) {
-    #div-1, #publish-form {
-      display:none;
-    }
+div.github-button {
+    float: right;
+    padding: 5px 0;
 }
 
-iframe {
-    display: inline-block;
-    vertical-align: middle;
-    /* float: right; */
+@media screen and (max-width: 900px) {
+    #imc {
+      display:none;
+    }
 }
