@@ -66,6 +66,11 @@ div.github-button {
     padding: 5px 0;
 }
 
+textarea#Output {
+    resize: none;
+    height: 74px;
+}
+
 @media screen and (max-width: 900px) {
     #imc {
       display:none;
