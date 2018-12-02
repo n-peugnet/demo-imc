@@ -8,7 +8,7 @@ window.onload = async () => {
 	const imageMap = new imageMapCreator().map;
 	const list = document.querySelector('#maps');
 	const html = document.querySelector('html');
-	const locale = navigator.language || navigator.userLanguage;
+	const locale = navigator.language || navigator.userLanguage || "en-US";
 	// loaded var comes from home view
 
 	// form onsubmit event

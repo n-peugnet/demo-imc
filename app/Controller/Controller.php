@@ -13,7 +13,7 @@ class Controller extends \W\Controller\Controller
 
 	public function __construct()
 	{
-		$this->setLocale();
+		// $this->setLocale();
 	}
 
 	/**
