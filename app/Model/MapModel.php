@@ -15,6 +15,14 @@ class MapModel extends Model
 		return $this->adaptValues($map, $basePath);
 	}
 
+	public function findLast($basePath = '')
+	{
+		if (false === $map = parent::findLast()) {
+			return false;
+		}
+		return $this->adaptValues($map, $basePath);
+	}
+
 	/**
 	 * Gets a list of maps from an id in an order
 	 * @param int $from id of the first item to retrieve (included)

@@ -1,5 +1,10 @@
 <?php $this->layout('layout', ['title' => 'Image-map Creator']) ?>
 
+<?php $this->start('meta') ?>
+	<meta property="og:url" content="<?= $this->url('home') ?>" />
+	<meta property="og:image" content="<?= $lastMap['image'] ?>" />
+<?php $this->stop('meta') ?>
+
 <?php $this->start('js') ?>
 	<script src="<?= $this->assetUrl("js/image-map-creator/dist/image-map-creator.bundle.js") ?>""></script>
 	<script src="<?= $this->assetUrl("js/mustache.min.js") ?>""></script>
@@ -57,9 +62,9 @@
 			template: '<?= $this->assetUrl('templates/view.map.mustache') ?>',
 		}
 		let loaded = {
-			first: <?= $maxMapId ?>,
-			next: <?= $maxMapId ?>,
-			remaining: <?= $maxMapId > 0 ?>,
+			first: <?= $lastMap['id'] ?>,
+			next: <?= $lastMap['id'] ?>,
+			remaining: <?= $lastMap['id'] > 0 ?>,
 		}
 	</script>
 <?php $this->stop('main_content') ?>
