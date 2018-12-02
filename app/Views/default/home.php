@@ -5,8 +5,11 @@
 	<script src="<?= $this->assetUrl("js/mustache.min.js") ?>""></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/p5.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/addons/p5.dom.min.js"></script>
-	<script src=<?= $this->assetUrl("js/script.js") ?> defer></script>
+	<script src="<?= $this->assetUrl("js/script.js") ?>" defer></script>
 	<script src="https://buttons.github.io/buttons.js" async defer></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="<?= $this->assetUrl("js/jquery.timeago.js") ?>" type="text/javascript"></script>
 <?php $this->stop('js') ?>
 
 <?php $this->start('main_content') ?>

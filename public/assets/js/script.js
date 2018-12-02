@@ -8,6 +8,7 @@ window.onload = async () => {
 	const imageMap = new imageMapCreator().map;
 	const list = document.querySelector('#maps');
 	const html = document.querySelector('html');
+	const locale = navigator.language || navigator.userLanguage;
 	// loaded var comes from home view
 
 	// form onsubmit event
@@ -71,7 +72,8 @@ window.onload = async () => {
 
 	// Initially load some items.
 	await loadMaps(loaded)
-		.then(html => list.insertAdjacentHTML('beforeend', html));
+		.then(html => list.insertAdjacentHTML('beforeend', html))
+		.then(enableTimeAgo);
 
 	// Detect when scrolled to bottom.
 	document.addEventListener('scroll', async () => {
@@ -81,7 +83,8 @@ window.onload = async () => {
 			if (loaded.remaining) {
 				console.log('chargement de nouveaux éléments');
 				loadMaps(loaded)
-					.then(html => list.insertAdjacentHTML('beforeend', html));
+					.then(html => list.insertAdjacentHTML('beforeend', html))
+					.then(enableTimeAgo);
 			}
 		}
 	});
@@ -100,11 +103,14 @@ window.onload = async () => {
 				let maps = response.maps;
 				for (const map of maps) {
 					let data = map.json.map;
+					let date = new Date(map.date);
 					map.name = data.name
 					map.imageId = map.image.split('/').pop().split('.').shift() + map.id;
 					data.name = map.imageId;
 					imageMap.setFromObject(data);
 					map.html = imageMap.toHtml(parseFloat(map.scale));
+					map.dateString = date.toLocaleDateString(locale);
+					map.timeString = date.toLocaleTimeString(locale)
 					html += Mustache.render(template, map)
 				}
 				let next = parseInt(maps[maps.length - 1].id) - 1;
@@ -154,4 +160,8 @@ function disable(elem) {
 
 function enable(elem) {
 	elem.disabled = false;
+}
+
+function enableTimeAgo() {
+	$("time.timeago").timeago();
 }

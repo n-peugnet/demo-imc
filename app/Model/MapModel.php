@@ -123,7 +123,7 @@ class MapModel extends Model
 	protected function adaptValues($map, $basePath)
 	{
 		$date = new DateTime($map['date'], new DateTimeZone('UTC'));
-		$map['date'] = $date->format('Y-m-d H:i:s e');
+		$map['date'] = $date->format('c');
 		$map['image'] = $basePath . $map['image'];
 		$map['json'] = json_decode($map['json']);
 		return $map;
