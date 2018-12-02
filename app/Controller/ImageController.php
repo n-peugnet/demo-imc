@@ -34,7 +34,10 @@ class ImageController extends FileController
 				break;
 			case 'png':
 				$image = imagecreatefrompng($filename);
-				imagepng(imagescale($image, $this->maxWidth), $filename);
+				$image = imagescale($image, $this->maxWidth);
+				imageAlphaBlending($image, true);
+				imageSaveAlpha($image, true);
+				imagepng($image, $filename);
 				break;
 			case 'gif':
 				$image = imagecreatefromgif($filename);
