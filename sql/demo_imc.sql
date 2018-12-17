@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  jeu. 22 nov. 2018 à 10:37
+-- Généré le :  lun. 17 déc. 2018 à 19:28
 -- Version du serveur :  5.7.9
 -- Version de PHP :  7.2.9
 
@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS `map` (
   `json` text NOT NULL,
   `image` varchar(128) NOT NULL,
   `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `session` varchar(32) NOT NULL,
   `pseudo` varchar(32) NOT NULL,
   `scale` float NOT NULL,
   PRIMARY KEY (`id`)

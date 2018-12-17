@@ -92,6 +92,8 @@ class MapController extends ImageController
 			$data['image'] = $path;
 			$data['scale'] = $scale;
 			$data['date'] = gmdate('Y-m-d H:i:s');
+			$data['session'] = session_id();
+			// $this->deleteDuplicate($path);
 			$insertId = $maps->insert($data)['id'];
 
 			$response = array(
@@ -125,6 +127,19 @@ class MapController extends ImageController
 			throw new RuntimeException("[JSON] Invalid data. Undefined parameter: map", 400);
 		}
 		return $object;
+	}
+
+	/**
+	 * Delete duplicates maps from the database
+	 * @param string $image
+	 */
+	protected function deleteDuplicate($image)
+	{
+		$maps = new MapModel();
+		$maps->deleteFrom([
+			'image' => $image,
+			'session' => session_id(),
+		]);
 	}
 
 }
